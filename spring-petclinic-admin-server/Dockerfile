@@ -9,6 +9,7 @@ ADD ./target/*.jar /app.jar
 EXPOSE ${EXPOSED_PORT}
 ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
 
-#env mysql i kullanacagimi belirttim. 
-#5. dockerize.tar.gz ismi ile indirdi
-#6. tar cmnd ile install etti
+#env ile docker da mysql profile i kullanacagimi belirttim.
+#4. App i docker da mysql profili kullarak olarak calistir
+#5. dockerize.tar.gz ismi ile ilgili versionu indirdi
+#6. tar cmnd ile unzip yapti, dockerize file olustu
