@@ -1054,7 +1054,7 @@ git checkout feature/msp-14
       Command:
 ```
 ```bash
-PATH="$PATH:/usr/local/bin"
+PATH="$PATH:/usr/bin/aws" # whereis aws
 APP_REPO_NAME="clarusway-repo/petclinic-app-dev"
 AWS_REGION="us-east-1"
 
