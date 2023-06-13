@@ -1392,7 +1392,7 @@ PATH="$PATH:/usr/local/bin"
 ANS_KEYPAIR="petclinic-ansible-test-dev.key"
 AWS_REGION="us-east-1"
 aws ec2 create-key-pair --region ${AWS_REGION} --key-name ${ANS_KEYPAIR} --query "KeyMaterial" --output text > ${ANS_KEYPAIR}
-chmod 400 ${ANS_KEYPAIR}
+chmod 400 ${ANS_KEYPAIR} # private key for ansible
 ```
   * Click `Save`
 
