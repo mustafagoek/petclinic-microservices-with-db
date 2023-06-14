@@ -1452,7 +1452,7 @@ PATH="$PATH:/usr/local/bin"
 ANS_KEYPAIR="petclinic-ansible-test-dev.key"
 export ANSIBLE_INVENTORY="${WORKSPACE}/ansible/inventory/hosts.ini"
 export ANSIBLE_PRIVATE_KEY_FILE="${WORKSPACE}/${ANS_KEYPAIR}"
-export ANSIBLE_HOST_KEY_CHECKING=False
+export ANSIBLE_HOST_KEY_CHECKING=False # dont ask yes or no!
 ansible all -m ping
 ```
 
