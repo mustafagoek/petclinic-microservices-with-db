@@ -1950,7 +1950,7 @@ aws s3 ls s3://petclinic-helm-charts-<put-your-name>/stable/myapp/
 * Add the Amazon S3 repository to Helm on the client machine.
 
 ```bash
-helm repo ls
+helm repo ls # helm repo ma ekliyorum
 AWS_REGION=us-east-1 helm repo add stable-petclinicapp s3://petclinic-helm-charts-<put-your-name>/stable/myapp/
 ```
 
