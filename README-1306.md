@@ -3178,8 +3178,8 @@ nodes:
 services:
   etcd:
     snapshot: true
-    creation: 6h
-    retention: 24h
+    creation: 6h # period
+    retention: 24h # 24 h halt
 
 ssh_key_path: ~/.ssh/petclinic-rancher.pem
 
@@ -3241,7 +3241,7 @@ kubectl create namespace cattle-system
 ```bash
 helm install rancher rancher-latest/rancher \
   --namespace cattle-system \
-  --set hostname=rancher.clarusway.us \
+  --set hostname=rancher.gokmus.de \
   --set tls=external \
   --set replicas=1 \
   --set global.cattle.psp.enabled=false
