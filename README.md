@@ -33,7 +33,7 @@ This project aims to create full CI/CD Pipeline for microservice based applicati
 | Local Development Build | Create Docker Compose File for Local Development | MSP-8-1 |  Prepare docker compose file to deploy the application locally. | feature/msp-8 |
 | Local Development Build | Create Docker Compose File for Local Development | MSP-8-2 |  Prepare a script to test the deployment of the app locally. | feature/msp-8 |
 | CI Server Setup | Prepare Jenkins Server | MSP-9 | Prepare Jenkins Server for CI/CD Pipeline. | feature/msp-9 |
-| CI Server Setup | Configure Jenkins Server for Project | MSP-10  | Configure Jenkins Server for Project Setup. |
+| CI Server Setup | Configure Jenkins Server for Project | MSP-10  | Configure Jenkins Server for Project Setup. | 
 | Testing Environment Setup | Implement Unit Tests | MSP-11-1  | Implement 3 Unit Tests locally. | feature/msp-11 |
 | Testing Environment Setup | Setup Code Coverage Tool | MSP-11-2  | Update POM file for Code Coverage Report. | feature/msp-11 |
 | Testing Environment Setup | Implement Code Coverage | MSP-11-3  | Generate Code Coverage Report manually. | feature/msp-11 |
@@ -47,7 +47,7 @@ This project aims to create full CI/CD Pipeline for microservice based applicati
 | QA Automation Setup for Development | Prepare a QA Automation Pipeline | MSP-18  | Prepare a QA Automation Pipeline on `dev` branch for Nightly Builds. | feature/msp-18 |
 | QA Setup for Release | Create a QA Infrastructure with eksctl | MSP-19  | Create a Permanent QA Infrastructure for Kubernetes Cluster with eksctl. | feature/msp-19 |
 | QA Setup for Release | Prepare Build Scripts for QA Environment | MSP-20  | Prepare Build Scripts for QA Environment | feature/msp-20 |
-| QA Setup for Release | Build and Deploy App on QA Environment Manually | MSP-21  | Build and Deploy App for QA Environment Manually using Jenkins Jobs. | feature/msp-21 |
+| QA Setup for Release | Build and Deploy App on QA Environment Manually | MSP-21  | Build and Deploy App for QA Environment Manually using Jenkins Jobs. | feature/msp-21 | 
 | QA Setup for Release | Prepare a QA Pipeline | MSP-22  | Prepare a QA Pipeline using Jenkins on `release` branch for Weekly Builds. | feature/msp-22 |
 | Staging and Production Setup | Prepare HA RKE Kubernetes Cluster | MSP-23  | Prepare High-availability RKE Kubernetes Cluster on AWS EC2 | feature/msp-23 |
 | Staging and Production Setup | Install Rancher App on RKE K8s Cluster | MSP-24  | Install Rancher App on RKE Kubernetes Cluster| |
@@ -144,10 +144,10 @@ git checkout dev
 ``` bash
 ./mvnw clean test
 ```
-> Note: If you get `permission denied` error, try to give execution permission to **mvnw**.
+> Note: If you get `permission denied` error, try to give execution permission to **mvnw**.  
 
     chmod +x mvnw
-
+  
 
 * Take the compiled code and package it in its distributable `JAR` format.
 
@@ -393,7 +393,7 @@ docker build --force-rm -t "petclinic-grafana-server:dev" ./docker/grafana
 docker build --force-rm -t "petclinic-prometheus-server:dev" ./docker/prometheus
 ```
 
-* Give execution permission to build-dev-docker-images.sh.
+* Give execution permission to build-dev-docker-images.sh. 
 
 ```bash
 chmod +x build-dev-docker-images.sh
@@ -433,21 +433,21 @@ git checkout feature/msp-8
 ``` yaml
 version: '2'
 
-services:
+services: 
   config-server:
     image: petclinic-config-server:dev
     container_name: config-server
     mem_limit: 512M
-    ports:
+    ports: 
       - 8888:8888
 
   discovery-server:
     image: petclinic-discovery-server:dev
     container_name: discovery-server
     mem_limit: 512M
-    ports:
+    ports: 
       - 8761:8761
-    depends_on:
+    depends_on: 
       - config-server
     entrypoint: ["./dockerize", "-wait=tcp://config-server:8888", "-timeout=160s", "--", "java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
 
@@ -457,51 +457,51 @@ services:
     mem_limit: 512M
     ports:
      - 8081:8081
-    depends_on:
+    depends_on: 
      - config-server
      - discovery-server
     entrypoint: ["./dockerize", "-wait=tcp://discovery-server:8761", "-timeout=160s", "--", "java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar" ]
-
+  
   visits-service:
     image: petclinic-visits-service:dev
     container_name: visits-service
     mem_limit: 512M
     ports:
      - 8082:8082
-    depends_on:
+    depends_on: 
      - config-server
      - discovery-server
     entrypoint: ["./dockerize", "-wait=tcp://discovery-server:8761", "-timeout=160s", "--", "java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar" ]
-
+  
   vets-service:
     image: petclinic-vets-service:dev
     container_name: vets-service
     mem_limit: 512M
     ports:
      - 8083:8083
-    depends_on:
+    depends_on: 
      - config-server
      - discovery-server
     entrypoint: ["./dockerize", "-wait=tcp://discovery-server:8761", "-timeout=160s", "--", "java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar" ]
-
+  
   api-gateway:
     image: petclinic-api-gateway:dev
     container_name: api-gateway
     mem_limit: 512M
     ports:
      - 8080:8080
-    depends_on:
+    depends_on: 
      - config-server
      - discovery-server
     entrypoint: ["./dockerize", "-wait=tcp://discovery-server:8761", "-timeout=160s", "--", "java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar" ]
-
+  
   admin-server:
     image: petclinic-admin-server:dev
     container_name: admin-server
     mem_limit: 512M
     ports:
      - 9090:9090
-    depends_on:
+    depends_on: 
      - config-server
      - discovery-server
     entrypoint: ["./dockerize", "-wait=tcp://discovery-server:8761", "-timeout=160s", "--", "java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar" ]
@@ -512,7 +512,7 @@ services:
     mem_limit: 512M
     ports:
      - 7979:7979
-    depends_on:
+    depends_on: 
      - config-server
      - discovery-server
     entrypoint: ["./dockerize", "-wait=tcp://discovery-server:8761", "-timeout=160s", "--", "java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar" ]
@@ -522,8 +522,8 @@ services:
     container_name: tracing-server
     mem_limit: 512M
     ports:
-     - 9411:9411
-
+     - 9411:9411 
+  
   grafana-server:
     image: petclinic-grafana-server:dev
     container_name: grafana-server
@@ -541,7 +541,7 @@ services:
   mysql-server:
     image: mysql:5.7.8
     container_name: mysql-server
-    environment:
+    environment: 
       MYSQL_ROOT_PASSWORD: petclinic
       MYSQL_DATABASE: petclinic
     mem_limit: 256M
@@ -817,7 +817,7 @@ mkdir jenkins
 - Source Code Management: Git
       Repository URL: https://github.com/[your-github-account]/petclinic-microservices.git
 - Branches to build:
-      Branch Specifier (blank for 'any'): - */dev
+      Branch Specifier (blank for 'any'): - */dev 
                                           - */feature**
                                           - */bugfix**
 - Build triggers: GitHub hook trigger for GITScm polling
@@ -842,14 +842,14 @@ echo 'Running Unit Tests on Petclinic Application'
 docker run --rm -v $HOME/.m2:/root/.m2 -v `pwd`:/app -w /app maven:3.8-openjdk-11 mvn clean test
 ```
 
-* Create a webhook for Jenkins CI Job;
+* Create a webhook for Jenkins CI Job; 
 
   + Go to the project repository page and click on `Settings`.
 
   + Click on the `Webhooks` on the left hand menu, and then click on `Add webhook`.
 
   + Copy the Jenkins URL, paste it into `Payload URL` field, add `/github-webhook/` at the end of URL, and click on `Add webhook`.
-
+  
   ``` yml
   http://[jenkins-server-hostname]:8080/github-webhook/
   ```
@@ -1054,7 +1054,7 @@ git checkout feature/msp-14
       Command:
 ```
 ```bash
-PATH="$PATH:/usr/bin/aws" # whereis aws
+PATH="$PATH:/usr/local/bin"
 APP_REPO_NAME="clarusway-repo/petclinic-app-dev"
 AWS_REGION="us-east-1"
 
@@ -1231,7 +1231,7 @@ resource "aws_security_group" "petclinic-kube-master-sg" {
     to_port = 0
     cidr_blocks = ["0.0.0.0/0"]
   }
-
+  
   tags = {
     Name = "kube-master-secgroup"
   }
@@ -1392,7 +1392,7 @@ PATH="$PATH:/usr/local/bin"
 ANS_KEYPAIR="petclinic-ansible-test-dev.key"
 AWS_REGION="us-east-1"
 aws ec2 create-key-pair --region ${AWS_REGION} --key-name ${ANS_KEYPAIR} --query "KeyMaterial" --output text > ${ANS_KEYPAIR}
-chmod 400 ${ANS_KEYPAIR} # private key for ansible
+chmod 400 ${ANS_KEYPAIR}
 ```
   * Click `Save`
 
@@ -1417,7 +1417,7 @@ terraform apply -auto-approve -no-color
 
 ```bash
 ANS_KEYPAIR="petclinic-ansible-test-dev.key"
-ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i ${WORKSPACE}/${ANS_KEYPAIR} ubuntu@172.31.82.220 hostname
+ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i ${WORKSPACE}/${ANS_KEYPAIR} ubuntu@172.31.91.243 hostname
 ```
   * Click `Save`
 
@@ -1432,7 +1432,7 @@ mkdir -p ansible/inventory
 - Prepare static inventory file with name of `hosts.ini` for Ansible under `ansible/inventory` folder using Docker machines private IP addresses.
 
 ```ini
-172.31.91.243   ansible_user=ubuntu
+172.31.91.243   ansible_user=ubuntu  
 172.31.87.143   ansible_user=ubuntu
 172.31.90.30    ansible_user=ubuntu
 ```
@@ -1452,7 +1452,7 @@ PATH="$PATH:/usr/local/bin"
 ANS_KEYPAIR="petclinic-ansible-test-dev.key"
 export ANSIBLE_INVENTORY="${WORKSPACE}/ansible/inventory/hosts.ini"
 export ANSIBLE_PRIVATE_KEY_FILE="${WORKSPACE}/${ANS_KEYPAIR}"
-export ANSIBLE_HOST_KEY_CHECKING=False # dont ask yes or no!
+export ANSIBLE_HOST_KEY_CHECKING=False
 ansible all -m ping
 ```
 
@@ -1548,7 +1548,7 @@ ansible -i ./ansible/inventory/dev_stack_dynamic_inventory_aws_ec2.yaml all -m p
       update_cache: yes
     vars:
       packages:
-      - apt-transport-https
+      - apt-transport-https  
       - curl
       - ca-certificates
 
@@ -1571,7 +1571,7 @@ ansible -i ./ansible/inventory/dev_stack_dynamic_inventory_aws_ec2.yaml all -m p
       state: restarted
       enabled: yes
 
-  # change the Docker cgroup driver by creating a configuration file `/etc/docker/daemon.json`
+  # change the Docker cgroup driver by creating a configuration file `/etc/docker/daemon.json` 
   # and adding the following line then restart deamon, docker and kubelet
 
   - name: change the Docker cgroup
@@ -1589,7 +1589,7 @@ ansible -i ./ansible/inventory/dev_stack_dynamic_inventory_aws_ec2.yaml all -m p
 
 - hosts: role_master
   tasks:
-
+      
   - name: pull kubernetes images before installation
     become: yes
     shell: kubeadm config images pull
@@ -1598,7 +1598,7 @@ ansible -i ./ansible/inventory/dev_stack_dynamic_inventory_aws_ec2.yaml all -m p
     become: true
     shell: |
       kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=All
-
+    
   - name: Setup kubeconfig for ubuntu user
     become: true
     command: "{{ item }}"
@@ -1623,7 +1623,7 @@ ansible -i ./ansible/inventory/dev_stack_dynamic_inventory_aws_ec2.yaml all -m p
       name: "kube_master"
       worker_join: "{{ join_command_for_workers.stdout.strip() }}"
 
-  - name: install Helm
+  - name: install Helm 
     shell: |
       cd /home/ubuntu
       curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
@@ -1823,7 +1823,7 @@ services:
 
   mysql-server:
     image: mysql:5.7.8
-    environment:
+    environment: 
       MYSQL_ROOT_PASSWORD: petclinic
       MYSQL_DATABASE: petclinic
     ports:
@@ -1858,7 +1858,7 @@ helm create petclinic_chart
 ```bash
 rm -r petclinic_chart/templates/*
 ```
-
+  
 * Convert the `docker-compose.yml` into k8s/petclinic_chart/templates objects and save under `k8s/petclinic_chart` folder.
 
 ```bash
@@ -1878,7 +1878,7 @@ kompose convert -f docker-compose.yml -o petclinic_chart/templates
         - name: init-discovery-server
           image: busybox
           command: ['sh', '-c', 'until nc -z discovery-server:8761; do echo waiting for discovery-server; sleep 2; done;']
-```
+``` 
 
 * Update `spec.rules.host` field of `api-gateway-ingress.yaml` file and add `ingressClassName: nginx` field under the `spec` field as below.
 
@@ -1931,12 +1931,12 @@ export PATH=$PATH:/usr/local/bin
 helm version
 helm plugin install https://github.com/hypnoglow/helm-s3.git
 exit
-```
+``` 
 
 * ``Initialize`` the Amazon S3 Helm repository.
 
 ```bash
-AWS_REGION=us-east-1 helm s3 init s3://petclinic-helm-charts-<put-your-name>/stable/myapp
+AWS_REGION=us-east-1 helm s3 init s3://petclinic-helm-charts-<put-your-name>/stable/myapp 
 ```
 
 * The command creates an ``index.yaml`` file in the target to track all the chart information that is stored at that location.
@@ -1947,10 +1947,10 @@ AWS_REGION=us-east-1 helm s3 init s3://petclinic-helm-charts-<put-your-name>/sta
 aws s3 ls s3://petclinic-helm-charts-<put-your-name>/stable/myapp/
 ```
 
-* Add the Amazon S3 repository to Helm on the client machine.
+* Add the Amazon S3 repository to Helm on the client machine. 
 
 ```bash
-helm repo ls # helm repo ma ekliyorum
+helm repo ls
 AWS_REGION=us-east-1 helm repo add stable-petclinicapp s3://petclinic-helm-charts-<put-your-name>/stable/myapp/
 ```
 
@@ -1965,7 +1965,7 @@ appVersion: 0.1.0
 
 ```bash
 cd k8s
-helm package petclinic_chart/
+helm package petclinic_chart/ 
 ```
 
 * Store the local package in the Amazon S3 Helm repository.
@@ -1983,11 +1983,11 @@ helm search repo stable-petclinicapp
 * You get an output as below.
 
 ```bash
-NAME                                    CHART VERSION   APP VERSION     DESCRIPTION
+NAME                                    CHART VERSION   APP VERSION     DESCRIPTION                
 stable-petclinicapp/petclinic_chart     0.0.1           0.1.0           A Helm chart for Kubernetes
 ```
 
-* In ``Chart.yaml``, ``set`` the `version` value to `0.0.2` in Chart.yaml, and then package the chart, this time changing the version in Chart.yaml to 0.0.2. Version control is ideally achieved through automation by using tools like GitVersion or Jenkins build numbers in a CI/CD pipeline.
+* In ``Chart.yaml``, ``set`` the `version` value to `0.0.2` in Chart.yaml, and then package the chart, this time changing the version in Chart.yaml to 0.0.2. Version control is ideally achieved through automation by using tools like GitVersion or Jenkins build numbers in a CI/CD pipeline. 
 
 ```bash
 helm package petclinic_chart/
@@ -2009,7 +2009,7 @@ helm search repo stable-petclinicapp
 * You get an ``output`` as below.
 
 ```bash
-NAME                                    CHART VERSION   APP VERSION     DESCRIPTION
+NAME                                    CHART VERSION   APP VERSION     DESCRIPTION                
 stable-petclinicapp/petclinic_chart     0.0.2           0.1.0           A Helm chart for Kubernetes
 ```
 
@@ -2022,7 +2022,7 @@ helm search repo stable-petclinicapp --versions
 * Output:
 
 ```bash
-NAME                                    CHART VERSION   APP VERSION     DESCRIPTION
+NAME                                    CHART VERSION   APP VERSION     DESCRIPTION                
 stable-petclinicapp/petclinic_chart     0.0.2           0.1.0           A Helm chart for Kubernetes
 stable-petclinicapp/petclinic_chart     0.0.1           0.1.0           A Helm chart for Kubernetes
 ```
@@ -2055,7 +2055,7 @@ git checkout feature/msp-18
 - Prepare a script to ``package`` the app with maven Docker container and save it as `package-with-maven-container.sh` and save it under `jenkins` folder.
 
 ```bash
-docker run --rm -v $HOME/.m2:/root/.m2 -v $WORKSPACE:/app -w /app maven:3.6-openjdk-11 mvn clean package #after run, containers are will be deleted
+docker run --rm -v $HOME/.m2:/root/.m2 -v $WORKSPACE:/app -w /app maven:3.6-openjdk-11 mvn clean package
 ```
 
 - Prepare a script to create ``ECR tags`` for the dev docker images and save it as `prepare-tags-ecr-for-dev-docker-images.sh` and save it under `jenkins` folder.
@@ -2100,7 +2100,7 @@ docker build --force-rm -t "${IMAGE_TAG_PROMETHEUS_SERVICE}" "${WORKSPACE}/docke
 
 ```bash
 # Provide credentials for Docker to login the AWS ECR and push the images
-aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}
+aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY} 
 docker push "${IMAGE_TAG_ADMIN_SERVER}"
 docker push "${IMAGE_TAG_API_GATEWAY}"
 docker push "${IMAGE_TAG_CONFIG_SERVER}"
@@ -2167,7 +2167,7 @@ aws ecr create-repository \
 
   - name: copy the docker config file
     become: yes
-    copy:
+    copy: 
       src: $JENKINS_HOME/.docker/config.json
       dest: /home/ubuntu/.docker/config.json
 
@@ -2217,7 +2217,7 @@ driver.close()
     shell: "docker run --rm -v {{ workspace }}:{{ workspace }} -w {{ workspace }} clarusway/selenium-py-chrome:latest python {{ item }}"
     with_fileglob: "{{ workspace }}/selenium-jobs/dummy*.py"
     register: output
-
+  
   - name: show results
     debug: msg="{{ item.stdout }}"
     with_items: "{{ output.results }}"
@@ -2237,7 +2237,7 @@ cd petclinic-microservices-with-db/
 ansible-playbook --connection=local --inventory 127.0.0.1, --extra-vars "workspace=$(pwd)" ./ansible/playbooks/pb_run_dummy_selenium_job.yaml
 ```
 
-- Next, you can change something in the `dummy_selenium_test_headless.py` (I'm Feeling Lucks) and run the command again. And check the test ``passed`` or ``failed``.
+- Next, you can change something in the `dummy_selenium_test_headless.py` (I'm Feeling Lucks) and run the command again. And check the test ``passed`` or ``failed``. 
 
 - Commit the change, then push the scripts for dummy selenium job to the remote repo.
 
@@ -2273,7 +2273,7 @@ ansible-playbook --connection=local --inventory 127.0.0.1, --extra-vars "workspa
     shell: "docker run --rm --env MASTER_PUBLIC_IP={{ master_public_ip }} -v {{ workspace }}:{{ workspace }} -w {{ workspace }} clarusway/selenium-py-chrome:latest python {{ item }}"
     register: output
     with_fileglob: "{{ workspace }}/selenium-jobs/test*.py"
-
+  
   - name: show results
     debug: msg="{{ item.stdout }}"
     with_items: "{{ output.results }}"
@@ -2285,7 +2285,7 @@ ansible-playbook --connection=local --inventory 127.0.0.1, --extra-vars "workspa
 APP_IP = os.environ['MASTER_PUBLIC_IP']
 url = "http://"+APP_IP.strip()+":30001/"
 ```
-
+ 
 - Prepare a script to run the playbook for all selenium jobs on Jenkins Server (localhost) and save it as `run_selenium_jobs.sh` under `ansible/scripts` folder.
 
 ```bash
@@ -2408,10 +2408,10 @@ pipeline {
                 sh "helm package k8s/petclinic_chart"
                 sh "helm s3 push --force petclinic_chart-${BUILD_NUMBER}.tgz stable-petclinic"
                 sh "envsubst < ansible/playbooks/dev-petclinic-deploy-template > ansible/playbooks/dev-petclinic-deploy.yaml"
-                sh "sleep 60"
+                sh "sleep 60"    
                 sh "ansible-playbook -i ./ansible/inventory/dev_stack_dynamic_inventory_aws_ec2.yaml ./ansible/playbooks/dev-petclinic-deploy.yaml"
             }
-        }
+        }     
 
         stage('Test the Application Deployment'){
             steps {
@@ -2742,7 +2742,7 @@ git checkout feature/msp-21
 - Create a ``Jenkins Job`` with name of `build-and-deploy-petclinic-on-qa-env` to build and deploy the app on `QA environment` manually on `release` branch using following script, and save the script as `build-and-deploy-petclinic-on-qa-env-manually.sh` under `jenkins` folder.
 
 ```yml
-- job name: build-and-deploy-petclinic-on-qa-env
+- job name: build-and-deploy-petclinic-on-qa-env  
 - job type: Freestyle project
 - Source Code Management: Git
       Repository URL: https://github.com/[your-github-account]/petclinic-microservices.git
@@ -3037,7 +3037,7 @@ git checkout feature/msp-23
 * Create an IAM Role with name of `petclinic-rke-role` to attach RKE nodes (instances) using `petclinic-rke-controlplane-policy` and `petclinic-rke-etcd-worker-policy`.
 
 * Create a security group for External Application Load Balancer of Rancher with name of `petclinic-rke-alb-sg` and allow HTTP (Port 80) and HTTPS (Port 443) connections from anywhere.
-
+  
 * Create a security group for RKE Kubernetes Cluster with name of `petclinic-rke-cluster-sg` and define following inbound and outbound rules.
 
   * ``Inbound`` rules;
@@ -3047,7 +3047,7 @@ git checkout feature/msp-23
     * Allow HTTPS protocol (TCP on port 443) from any source that needs to use Rancher UI or API.
 
     * Allow TCP on port 6443 from any source that needs to use Kubernetes API server(ex. Jenkins Server).
-
+  
     * Allow SSH on port 22 to any node IP that installs Docker (ex. Jenkins Server).
 
   * ``Outbound`` rules;
@@ -3055,7 +3055,7 @@ git checkout feature/msp-23
     * Allow SSH protocol (TCP on port 22) to any node IP from a node created using Node Driver.
 
     * Allow HTTP protocol (TCP on port 80) to all IP for getting updates.
-
+    
     * Allow HTTPS protocol (TCP on port 443) to `35.160.43.145/32`, `35.167.242.46/32`, `52.33.59.17/32` for catalogs of `git.rancher.io`.
 
     * Allow TCP on port 2376 to any node IP from a node created using Node Driver for Docker machine TLS port.
@@ -3063,22 +3063,22 @@ git checkout feature/msp-23
   * Allow all protocol on all port from `petclinic-rke-cluster-sg` for self communication between Rancher `controlplane`, `etcd`, `worker` nodes.
 
 * Log into Jenkins Server and create `petclinic-rancher.pem` key-pair for Rancher Server using AWS CLI
-
+  
 ```bash
 aws ec2 create-key-pair --region us-east-1 --key-name petclinic-rancher --query KeyMaterial --output text > ~/.ssh/petclinic-rancher.pem
 chmod 400 ~/.ssh/petclinic-rancher.pem
 ```
 
-* Launch an EC2 instance using `Ubuntu Server 20.04 LTS (HVM) (64-bit x86)` with `t3a.medium` type, 16 GB root volume,  `petclinic-rke-cluster-sg` security group, `petclinic-rke-role` IAM Role, `Name:Petclinic-Rancher-Cluster-Instance` tag and `petclinic-rancher.pem` key-pair. Take note of `subnet id` of EC2.
+* Launch an EC2 instance using `Ubuntu Server 20.04 LTS (HVM) (64-bit x86)` with `t3a.medium` type, 16 GB root volume,  `petclinic-rke-cluster-sg` security group, `petclinic-rke-role` IAM Role, `Name:Petclinic-Rancher-Cluster-Instance` tag and `petclinic-rancher.pem` key-pair. Take note of `subnet id` of EC2. 
 
 * Attach a tag to the `nodes (intances)`, `subnets` and `security group` for Rancher with `Key = kubernetes.io/cluster/Petclinic-Rancher` and `Value = owned`.
-
+  
 * Log into `Petclinic-Rancher-Cluster-Instance` from Jenkins Server (Bastion host) and install Docker using the following script.
 
 ```bash
 # Set hostname of instance
 sudo hostnamectl set-hostname rancher-instance-1
-# Update OS
+# Update OS 
 sudo apt-get update -y
 sudo apt-get upgrade -y
 # Update the apt package index and install packages to allow apt to use a repository over HTTPS
@@ -3245,12 +3245,12 @@ helm install rancher rancher-latest/rancher \
   --set tls=external \
   --set replicas=1 \
   --set global.cattle.psp.enabled=false
-
+  
 # Change DNS name
 ```
 
 * Check if the Rancher Server is deployed successfully.
-
+  
 ```bash
 kubectl -n cattle-system get deploy rancher
 kubectl -n cattle-system get pods
@@ -3293,7 +3293,7 @@ git branch feature/msp-26
 git checkout feature/msp-26
 ```
 
-* Set up a Nexus Server by using docker image.  To do so, prepare a [Terraform File for Nexus Server](./msp-26-nexus-server-terraform.yml) with following script and save it as `nexus-server.tf` under `infrastructure` folder.
+* Set up a Nexus Server by using docker image.  To do so, prepare a [Terraform File for Nexus Server](./msp-26-nexus-server-terraform.yml) with following script and save it as `nexus-server.tf` under `infrastructure` folder. 
 
 * Note: Terraform will will launch an t3a.medium (Nexus needs 8 GB of RAM) EC2 instance using the Amazon Linux 2 AMI with security group allowing `SSH (22)` and `Nexus Port (8081)` connections.
 
@@ -3339,7 +3339,7 @@ Write `admin` for Username and paste the string which you copied from admin.pass
 nano /home/ec2-user/.m2/settings.xml
 ```
 
-- Your settings.xml file should look like this (Don't forget to change the URL of your repository and the password):
+- Your settings.xml file should look like this (Don't forget to change the URL of your repository and the password): 
 
 ```xml
 <settings>
@@ -3382,7 +3382,7 @@ nano /home/ec2-user/.m2/settings.xml
     <server>
       <id>nexus</id>
       <username>admin</username>
-      <password>your-password</password>
+      <password>your-password</password> 
     </server>
   </servers>
 </settings>
@@ -3426,9 +3426,9 @@ nano /home/ec2-user/.m2/settings.xml
 git add .
 git commit -m 'added Nexus server terraform files'
 git push --set-upstream origin feature/msp-26
-git checkout dev
+git checkout release
 git merge feature/msp-26
-git push origin dev
+git push origin release
 ```
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -3543,7 +3543,7 @@ sudo mv ./rancher*/rancher /usr/local/bin/rancher
 chmod +x /usr/local/bin/rancher
 rancher --version
 ```
-
+  
 * Create Rancher API Key [Rancher API Key](https://rancher.com/docs/rancher/v2.x/en/user-settings/api-keys/#creating-an-api-key) to enable access to the `Rancher` server. Take note, `Access Key (username)` and `Secret Key (password)`.
 
 - On jenkins server, select ***Manage Jenkins --> Manage Credentials --> Jenkins -->   Global credentials (unrestricted) --> Add Credentials***.
@@ -3569,7 +3569,7 @@ pipeline {
         ECR_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
         RANCHER_URL="https://rancher.clarusway.us"
         // Get the project-id from Rancher UI (projects/namespaces --> petclinic-cluster-staging namespace --> Edit yaml --> copy projectId )
-        RANCHER_CONTEXT="petclinic-cluster:project-id"
+        RANCHER_CONTEXT="petclinic-cluster:project-id" 
        //First part of projectID
         CLUSTERID="petclinic-cluster"
         RANCHER_CREDS=credentials('rancher-petclinic-credentials')
@@ -3681,7 +3681,14 @@ git merge feature/msp-27
 git push origin release
 ```
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+Note: To see petclinic app on your browser, change networkpolicy ingress part as below on rancher server.
+
+```yaml
+  ingress:
+    - {}
+```
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 ## MSP 28 - Prepare a Production Pipeline
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
@@ -3856,7 +3863,7 @@ kind: Service
 metadata:
   annotations:
     kompose.cmd: kompose convert -f docker-compose-local-db.yml
-    kompose.version: 1.26.1 (a9d05d509)
+    kompose.version: 1.28.0 (c4137012e)
   labels:
     io.kompose.service: mysql-server
   name: mysql-server
@@ -3991,6 +3998,12 @@ git checkout feature/msp-29
 
 * Configure TLS(SSL) certificate for `petclinic.clarusway.us` using `cert-manager` on petclinic K8s cluster with the following steps.
 
+- Switch user to jenkins for managing eks cluster. Execute following commands as `jenkins` user.
+
+```bash
+sudo su - jenkins
+```
+
 * Install the `cert-manager` on petclinic cluster. See [Cert-Manager info](https://cert-manager.io/docs/).
 
   * Create the namespace for cert-manager
@@ -4032,7 +4045,7 @@ git checkout feature/msp-29
   kubectl get pods --namespace cert-manager -o wide
   ```
 
-* Create `ClusterIssuer` with name of `tls-cluster-issuer-prod.yml` for the production certificate through `Let's Encrypt ACME` (Automated Certificate Management Environment) with following content by importing YAML file on Ranhcer and save it under `k8s` folder. *Note that certificate will only be created after annotating and updating the `Ingress` resource.*
+* Create `ClusterIssuer` with name of `tls-cluster-issuer-prod.yml` for the production certificate through `Let's Encrypt ACME` (Automated Certificate Management Environment) with following content by importing YAML file on Ranhcer and save it under `/var/lib/jenkins` folder. *Note that certificate will only be created after annotating and updating the `Ingress` resource.*
 
 ```yaml
 apiVersion: cert-manager.io/v1
@@ -4097,8 +4110,8 @@ git commit -m 'added tls scripts for petclinic-production'
 git push --set-upstream origin feature/msp-29
 git checkout main
 git merge feature/msp-29
-git push origin main
-```
+git push origin main 
+
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 ## MSP 30 - Monitoring with Prometheus and Grafana
@@ -4115,7 +4128,7 @@ port: 9090
 nodePort: 30002
 type: NodePort
 ```
-
+   
 * Create a Kubernetes `NodePort` Service for Grafana Server on Rancher to expose it.
 
 - Go to the `Service Discovery -> Services -> grafana -> edit yaml` page and make changes.
