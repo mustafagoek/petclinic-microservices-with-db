@@ -79,7 +79,7 @@
     become: true
     shell: |
       kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=All
-
+#cluster i olusturmaya baslar
   - name: Setup kubeconfig for ubuntu user
     become: true
     command: "{{ item }}"
